@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\Contracts\UserRepositoryContract;
+use Illuminate\Support\Facades\Auth;
 
 class UserService
 {
@@ -24,6 +25,17 @@ class UserService
         $newUser = $this->userRepositoryContract->registerUser($userData);
 
         return $newUser;
+
+    }
+
+    public function loginUser(array $data)
+    {
+        if(Auth::attempt(['email' => $data['email'],'password' => $data['password']]))
+        {
+            $user = Auth::user();
+            return $user;
+        }
+        return false;
 
     }
 }
