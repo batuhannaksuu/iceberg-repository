@@ -25,7 +25,6 @@ class UserService
         $newUser = $this->userRepositoryContract->registerUser($userData);
 
         return $newUser;
-
     }
 
     public function loginUser(array $data)
@@ -36,6 +35,11 @@ class UserService
             return $user;
         }
         return false;
+    }
 
+    public function getUser()
+    {
+        $user = Auth::user();
+        return $user;
     }
 }

@@ -2,60 +2,73 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseHelper;
+use App\Http\Requests\User\LoginUserRequest;
 use App\Http\Requests\User\RegisterUserRequest;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    protected $userService;
+    protected $userService,$responseHelper;
 
-    public function __construct(UserService $userService)
+    /**
+     * @param UserService $userService
+     * @param ResponseHelper $responseHelper
+     */
+    public function __construct(UserService $userService, ResponseHelper $responseHelper)
     {
         $this->userService = $userService;
+        $this->responseHelper = $responseHelper;
     }
 
+    /**
+     * @param RegisterUserRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function register(RegisterUserRequest $request)
     {
         $user = $this->userService->registerUser($request->all());
 
         if ($user) {
             $token = $user->createToken('Personal Access Token')->accessToken;
-            return response()->json([
-                'status' => true,
+
+            $data = [
+                'success' => true,
                 'message' => 'User created',
                 'data' => $user,
                 'token' => $token
-            ], 201);
+            ];
+            return $this->responseHelper->successResponse(true,'User created',$data,201);
+
         } else {
-            return response()->json([
-                'status' => false,
-                'message' => 'User not create',
-            ], 500);
+            return $this->responseHelper->errorResponse(false,'user not create',500);
         }
     }
 
-    public function login(Request $request)
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function login(LoginUserRequest $request)
     {
         $user = $this->userService->loginUser($request->all());
         if($user) {
             $token = $user->createToken('Personal Access Token');
-
-            return response()->json([
-                'status' => true,
+            $data = [
+                'success' => true,
                 'message' => 'success login',
                 'access_token' => $token->accessToken,
                 'token_type' => 'Bearer',
                 'expirey_date' => $token->token->expires_at,
                 'user' => $user
-            ], 200);
+            ];
+            return $this->responseHelper->successResponse(true,'User login',$data);
         } else {
-            return response()->json([
-               'status' => false,
-               'message' => 'Unauthorised'
-            ],401);
+            return $this->responseHelper->errorResponse(false,'Unauthenticated',401);
         }
-
     }
+
 
 }
