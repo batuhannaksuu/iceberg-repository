@@ -17,9 +17,9 @@ class UserService
     public function registerUser(array $data)
     {
         $userData = [
-          'name' => $data['name'],
-          'email' =>  $data['email'],
-          'password' => bcrypt($data['password'])
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password'])
         ];
 
         $newUser = $this->userRepositoryContract->registerUser($userData);
@@ -29,17 +29,29 @@ class UserService
 
     public function loginUser(array $data)
     {
-        if(Auth::attempt(['email' => $data['email'],'password' => $data['password']]))
-        {
+        if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
             $user = Auth::user();
             return $user;
         }
         return false;
     }
 
-    public function getUser()
+    public function logoutUser()
     {
-        $user = Auth::user();
-        return $user;
+        $token = Auth::user()->token();
+        $token->revoke();
+        return true;
+    }
+
+
+    public
+    function getUser()
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            return $user;
+        } else {
+            return false;
+        }
     }
 }

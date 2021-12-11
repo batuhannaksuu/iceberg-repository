@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\AppointmentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,12 +23,27 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 */
 Route::group(['middleware' => 'api', 'prefix' => 'users'],function (){
 
+
+
+    Route::group(['middleware' => 'auth:api'], function (){
+
+    });
+});
+
+Route::middleware(['api'])->group(function (){
+
     Route::post('/register',[AuthController::class,'register']);
     Route::post('/login',[AuthController::class,'login']);
 
-    Route::group(['middleware' => 'auth:api'], function (){
+    Route::post('/contact',[AppointmentController::class,'create']);
+
+
+
+    Route::middleware('auth:api')->group(function (){
         Route::get('/profile',[UserController::class,'profile']);
+        Route::get('logout',[AuthController::class,'logout']);
     });
+
 });
 
 

@@ -70,5 +70,16 @@ class AuthController extends Controller
         }
     }
 
+    public function logout()
+    {
+        $logout = $this->userService->logoutUser();
+        if($logout)
+        {
+         return $this->responseHelper->successResponse(true,'logout',$logout);
+        } else {
+            return $this->responseHelper->errorResponse(false,'Unauthenticated',$logout,500);
+        }
+    }
+
 
 }
