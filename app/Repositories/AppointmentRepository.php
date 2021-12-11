@@ -7,11 +7,11 @@ use App\Repositories\Contracts\AppointmentRepositoryContract;
 
 class AppointmentRepository implements AppointmentRepositoryContract
 {
-    public function createAppointment(array $data,int $id)
+    public function createAppointment(array $data)
     {
         try {
             $appointment = new Appointments();
-            $appointment->contact_id = $id;
+            $appointment->contact_id = $data['contact_id'];
             $appointment->appointment_address = $data['appointment_address'];
             $appointment->appointment_date = $data['appointment_date'];
             $appointment->post_code = $data['post_code'];

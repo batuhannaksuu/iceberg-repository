@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\ContactController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,9 +36,7 @@ Route::middleware(['api'])->group(function (){
     Route::post('/register',[AuthController::class,'register']);
     Route::post('/login',[AuthController::class,'login']);
 
-    Route::post('/contact',[AppointmentController::class,'create']);
-
-
+    Route::post('/contact',[ContactController::class,'create']);
 
     Route::middleware('auth:api')->group(function (){
         Route::get('/profile',[UserController::class,'profile']);
