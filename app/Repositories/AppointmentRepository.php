@@ -30,4 +30,15 @@ class AppointmentRepository implements AppointmentRepositoryContract
         // TODO: Implement createAppointment() method.
     }
 
+    public function checkAppointment($travelStartTime,$travelEndTime)
+    {
+        try {
+            $check = Appointments::all()->whereBetween('appointment_date',[$travelStartTime,$travelEndTime])->count();
+            return $check;
+        } catch (\Exception $e) {
+        }
+
+        // TODO: Implement checkAppointment() method.
+    }
+
 }

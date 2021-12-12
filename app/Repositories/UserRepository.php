@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryContract;
+use Illuminate\Support\Facades\Auth;
 
 class UserRepository implements UserRepositoryContract
 {
@@ -18,6 +19,27 @@ class UserRepository implements UserRepositoryContract
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-        // TODO: Implement registerUser() method.
     }
+
+    public function loginUser(array $data)
+    {
+        try {
+            $user = Auth::attempt(['email' => $data['email'], 'password' => $data['password']]);
+            return $user;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    public function logout()
+    {
+        try {
+            $token = Auth::user()->token();
+            return $token;
+        } catch (\Exception $e)
+        {
+            return $e->getMessage();
+        }
+
+    }
+
 }

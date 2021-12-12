@@ -20,7 +20,8 @@ class ContactController extends Controller
     public function create(CreateContactRequest $request)
     {
         $contact = $this->contactService->create($request->all());
-        dd($contact);
+        return $contact;
+
     }
 
 

@@ -39,7 +39,24 @@ function getGoogle($office_lat,$office_lng,$lat,$lng)
 {
     $url = 'https://maps.googleapis.com/maps/api/distancematrix/json?destinations='.$lat.','.$lng.'&origins='.$office_lat.','.$office_lng.'&key=AIzaSyDOfPRtk-dOO6A-m82JuUIVBhsB32KuzUM';
     $response = \Illuminate\Support\Facades\Http::acceptJson()->get($url);
-    return $response->object();
+    $response = $response->object();
+    if ($response->status == "OK")
+    {
+        //google distance action
+        $distance = $response->rows[0]->elements[0]->distance->text;
+
+        //google time action
+        $time = $response->rows[0]->elements[0]->duration->text;
+
+        $data = [
+            'success' => true,
+            'distance' => $distance,
+            'time' => $time
+        ];
+        return $data;
+    } else {
+        return false;
+    }
 }
 
 ?>
