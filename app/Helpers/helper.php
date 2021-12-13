@@ -37,7 +37,7 @@ function checkPostCode($data)
 
 function getGoogle($office_lat,$office_lng,$lat,$lng)
 {
-    $url = 'https://maps.googleapis.com/maps/api/distancematrix/json?destinations='.$lat.','.$lng.'&origins='.$office_lat.','.$office_lng.'&key=AIzaSyDOfPRtk-dOO6A-m82JuUIVBhsB32KuzUM';
+    $url = 'https://maps.googleapis.com/maps/api/distancematrix/json?destinations='.$lat.','.$lng.'&origins='.$office_lat.','.$office_lng.'&key='.env('GOOGLE_KEY');
     $response = \Illuminate\Support\Facades\Http::acceptJson()->get($url);
     $response = $response->object();
     if ($response->status == "OK")
