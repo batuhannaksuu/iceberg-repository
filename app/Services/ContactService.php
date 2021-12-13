@@ -2,17 +2,19 @@
 
 namespace App\Services;
 
+use App\Helpers\ResponseHelper;
 use App\Repositories\Contracts\AppointmentRepositoryContract;
 use App\Repositories\Contracts\ContactRepositoryContract;
 
 class ContactService
 {
-    protected $contactRepositoryContract,$appointmentService;
+    protected $contactRepositoryContract,$appointmentService,$responseHelper;
 
-    public function __construct(ContactRepositoryContract $contactRepositoryContract, AppointmentService $appointmentService)
+    public function __construct(ContactRepositoryContract $contactRepositoryContract, AppointmentService $appointmentService,ResponseHelper $responseHelper)
     {
         $this->contactRepositoryContract = $contactRepositoryContract;
         $this->appointmentService = $appointmentService;
+        $this->responseHelper = $responseHelper;
     }
 
     public function create(array $data)
@@ -36,11 +38,25 @@ class ContactService
             ];
 
             $appointment = $this->appointmentService->create($appointment);
-
-            return $appointment;
-
+            if ($appointment['success'])
+            {
+                return $this->responseHelper->successResponse(true,$appointment['message'],$appointment['data']);
+            } else {
+                $delete = $this->delete($appointment['contact']);
+                if ($delete)
+                {
+                    return $this->responseHelper->successResponse(false,$appointment['message'],'contact deleted');
+                } else {
+                    return $this->responseHelper->errorResponse(false,'not delete contact');
+                }
+            }
         } else {
-            return false;
+            return $this->responseHelper->errorResponse(false,'not create contact');
         }
+    }
+    public function delete(int $id)
+    {
+        $contact = $this->contactRepositoryContract->delete($id);
+        return $contact;
     }
 }

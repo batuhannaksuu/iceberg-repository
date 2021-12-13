@@ -22,4 +22,15 @@ class ContactRepository implements ContactRepositoryContract
             return $e->getMessage();
         }
     }
+    public function delete(int $id)
+    {
+        try {
+            $contact = Contacts::where('id',$id)->first();
+            $contact = $contact->delete();
+            return $contact;
+        } catch (\Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }
