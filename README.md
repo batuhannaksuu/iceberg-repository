@@ -16,7 +16,7 @@
 - POSTMAN
 
 ## Project Links And Usage
-**https://go.postman.co/workspace/My-Workspace~efdb9bf2-bd7e-426e-8293-1c66a83e6e20/collection/18150942-09f402a1-804c-44c9-bcba-1eabb57281b7
+**https://www.postman.com/marketimav/workspace/iceberg-challange/collection/18150942-09f402a1-804c-44c9-bcba-1eabb57281b7
 
 **baseUrl = https://yazilimbenim.com/api**
 
